@@ -1,10 +1,7 @@
 <?php
-CONST APP_NAME = "Fluently";
-
 
 if (! function_exists('view')) {
     function view($template = null,$content = null): void{
-        $app_name = APP_NAME;
         if ($content != null) {
             extract($content);
         }

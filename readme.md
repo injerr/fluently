@@ -11,3 +11,5 @@ Comandos basicos
 
 # Crear componente/vista:
 # php fluently make->view ViewName
+
+# En el archivo .env estan los ajustes de la base de datos
