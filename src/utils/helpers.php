@@ -10,7 +10,7 @@ if (! function_exists('view')) {
         }
 
         include_once('./views/comps/header/header.php');
-        include_once('./views/comps/navbar/nav.html');
+        include_once('./views/comps/navbar/nav.php');
         if ($template != null){
             include($template);
         }

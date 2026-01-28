@@ -7,15 +7,14 @@ class MainController extends Controller{
 
     public function __construct() {
         $this->db = Database::conectar();
+        // Controllers
     }
 
     public function handleRequest(){
         $option = $_GET['option'] ?? 'index';
-        $action = $_GET['action'] ?? 'listar';
-        $id = $_GET['id'] ?? null;
 
         match($option){
-            'index' => view('./views/index.html'),
+            'index' => view('./views/index.php'),
             default => view('./views/comps/404/404.php')
         };
     }
