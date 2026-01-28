@@ -1,0 +1,9 @@
+{
+    "name": "windows/fluently",
+    "autoload": {
+        "psr-4": {
+            "Windows\\Fluently\\": "src/"
+        }
+    },
+    "require": {}
+}
