@@ -19,4 +19,12 @@ class MainController extends Controller{
         };
     }
 
+    public function home() {
+        view('./views/index.php');
+    }
+
+    public function random() {
+        view('./views/random.php');
+    }
+
 }

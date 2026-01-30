@@ -10,6 +10,10 @@
         <!-- <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="index.php?option=productos">Productos</a>
         </li> -->
+        
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/random">Random</a>
+        </li>
       </ul>
 
     </div>
