@@ -1,5 +1,11 @@
 <?php
 
+if (! function_exists('redirect')) {
+    function redirect($location = "/"): void{
+        header("location: $location");
+    }
+}
+
 if (! function_exists('view')) {
     function view($template = null,$content = null): void{
         if ($content != null) {

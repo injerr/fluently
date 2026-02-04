@@ -10,21 +10,16 @@ class MainController extends Controller{
         // Controllers
     }
 
-    public function handleRequest(){
-        $option = $_GET['option'] ?? 'index';
-
-        match($option){
-            'index' => view('./views/index.php'),
-            default => view('./views/comps/404/404.php')
-        };
-    }
-
     public function home() {
         view('./views/index.php');
     }
 
     public function random() {
         view('./views/random.php');
+    }
+
+    public function redirect() {
+        redirect('/random');
     }
 
 }
