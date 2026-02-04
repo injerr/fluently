@@ -22,4 +22,8 @@ class MainController extends Controller{
         redirect('/random');
     }
 
+    public function err404(){
+        view('./views/comps/404/404.php');
+    }
+
 }

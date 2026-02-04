@@ -4,6 +4,6 @@ require_once './controllers/MainController.php';
 class App{
     public function run(){
         session_start();
-        require_once './web.php';
+        require_once './Route.php';
     }
 }
