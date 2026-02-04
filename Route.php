@@ -1,6 +1,7 @@
 <?php
-$req = false;
+
 class Route {
+    public static $matched = false;
     public static function get($path,$callback){
         if ($_SERVER['REQUEST_URI'] == $path || $_SERVER['REQUEST_URI'] == $path."/") {
 
@@ -9,7 +10,7 @@ class Route {
                 $ob = new $callback[0];
                 $ob->$method();
                 unset($ob);
-                $req = true;
+                self::$matched = true;
                 exit;
             }else{
                 call_user_func($callback);
@@ -18,14 +19,30 @@ class Route {
             
         }
     }
-}
 
-try {
-    require_once('web.php');
-    if (!$req) {
-        redirect('**');
-        require_once('web.php');
+    public static function fallback($callback){
+        if (self::$matched == false) {
+            if (is_callable($callback)) {
+                $res = $callback();
+                if (is_array($res)) {
+                    print_r($res);
+                }else{
+                    echo $res;
+                }
+                self::$matched = true;
+                return;
+            }
+            if (class_exists($callback[0])) {
+                $method = $callback[1];
+                $ob = new $callback[0];
+                $ob->$method();
+                unset($ob);
+                exit;
+            }else{
+                call_user_func($callback);
+                exit;
+            }
+        }
     }
-} catch (Exception $th) {
-    redirect();
+
 }
