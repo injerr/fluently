@@ -17,19 +17,6 @@ class {$argv[1]} extends Controller{
     public function __construct(PDO \$db) {
         \$this->modelo = new $model_name(\$db);
     }
-    
-    public function handleRequest(){
-        \$action = \$_GET['action'] ?? 'listar';
-        \$id = \$_GET['id'] ?? null;
-        match (\$action) {
-            'listar'  => \$this->mostrarLista(),
-            'nuevo'   => \$this->mostrarFormulario(),
-            'editar'  => \$this->mostrarFormulario(\$id),
-            'guardar' => \$this->procesar(),
-            'eliminar'=> \$this->borrar(\$id),
-            default   => \$this->mostrarLista(),
-        };
-    }
 
     public function mostrarLista() {
         //
