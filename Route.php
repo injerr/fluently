@@ -8,8 +8,12 @@ class Route {
 
         $params = [];
         $requestSegments = explode("/",$_SERVER['REQUEST_URI']);
-        var_dump($requestSegments);
         $segments = explode("/",$path);
+
+        if (count($segments) !== count($requestSegments)) {
+            self::$matched = false;
+            return;
+        }
 
         foreach ($segments as $i => $segment) {
             if (str_starts_with($segment,"{") & str_ends_with($segment,"}")){
