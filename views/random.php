@@ -16,3 +16,5 @@ if (class_exists($class)) {
     $ob = new $class();
     $ob->random();
 }
+echo "<br/>";
+echo $some;

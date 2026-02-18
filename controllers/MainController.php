@@ -14,8 +14,8 @@ class MainController extends Controller{
         view('./views/index.php');
     }
 
-    public function random() {
-        view('./views/random.php');
+    public function random($some = null) {
+        view('./views/random.php',compact('some'));
     }
 
     public function redirect() {
