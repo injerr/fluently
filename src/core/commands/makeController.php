@@ -13,9 +13,11 @@ require_once 'Controller.php';
 
 class {$argv[1]} extends Controller{
     private $model_name \$modelo;
+    private PDO $db;
 
-    public function __construct(PDO \$db) {
-        \$this->modelo = new $model_name(\$db);
+    public function __construct() {
+        \$this->db = Database::conectar();
+        \$this->modelo = new $model_name(\$this->db);
     }
 
     public function mostrarLista() {

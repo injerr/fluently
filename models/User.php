@@ -1,6 +1,6 @@
 <?php
-
-class User {
+require 'models/Model.php';
+class User extends Model {
     public function __construct(private PDO $db) {}
 
     public function listar(): array {

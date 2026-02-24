@@ -9,8 +9,9 @@ if (!file_exists($dir)) {
 
 $php = <<<PHP
 <?php
+require 'models/Model.php';
 
-class $model_name {
+class $model_name extends Model {
     public function __construct(private PDO \$db) {}
 
     public function listar(): array {
