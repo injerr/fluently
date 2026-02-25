@@ -1,5 +1,4 @@
 <?php
-require_once './controllers/MainController.php';
 
 class App{
     public function run(){
