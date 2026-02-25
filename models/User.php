@@ -1,6 +1,15 @@
 <?php
 require 'models/Model.php';
 class User extends Model {
+
+    protected static $primaryKey = 'id';
+    protected static $table = "users";
+    protected static $fillable = [
+        'id',
+        'user',
+        'password'
+    ];
+
     public function __construct(private PDO $db) {}
 
     public function listar(): array {
