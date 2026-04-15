@@ -1,15 +1,17 @@
-Comandos basicos
+Fluently CLI
 
-# Iniciar el servidor:
-# php fluently serve [--port=8000]
+El mini framework creado por @injerr (Jeremy Intriago Pachay), Todos los derechos reservados.
 
-# Crear controlador:
-# php fluently make->controller UserController
+Comandos básicos
+Iniciar el servidor
+php fluently serve --port=8000
+Crear un controlador
+php fluently make->controller UserController
+Crear un modelo
+php fluently make->model User
+Crear una vista
+php fluently make->view ViewName
 
-# Crear modelo:
-# php fluently make->model User
-
-# Crear componente/vista:
-# php fluently make->view ViewName
-
-# En el archivo .env estan los ajustes de la base de datos
+Configuración
+Archivo de configuraciópn de la conexión a la base de datos:
+.env
