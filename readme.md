@@ -1,17 +1,24 @@
-#Fluently CLI
+# Fluently CLI
 
-El mini framework creado por @injerr (Jeremy Intriago Pachay), Todos los derechos reservados.
+<i>El mini framework creado por @injerr (Jeremy Intriago Pachay), Todos los derechos reservados.</i>
 
-Comandos básicos
-Iniciar el servidor
-php fluently serve --port=8000
-Crear un controlador
-php fluently make->controller UserController
-Crear un modelo
-php fluently make->model User
-Crear una vista
-php fluently make->view ViewName
+<h3>Comandos básicos:</h3>
+<b>Iniciar el servidor</b><br>
+php fluently serve --port=8000<br><br>
+<b>Crear un controlador</b><br>
+php fluently make->controller UserController<br><br>
+<b>Crear un modelo</b><br>
+php fluently make->model User<br><br>
+<b>Crear una vista</b><br>
+php fluently make->view ViewName<br>
+<hr/>
+<h3>Configuración</h3>
+<b>El archivo .env sirve para configurar la base de datos:</b><br/>
 
-Configuración
-Archivo de configuraciópn de la conexión a la base de datos:
-.env
+DB_CONNECTION=mysql<br/>
+DB_HOST=localhost<br/>
+DB_NAME=tienda_db<br/>
+DB_USER=root<br/>
+DB_PASSWORD=<br/>
+
+APP_NAME=Fluently
