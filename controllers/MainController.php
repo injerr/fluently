@@ -10,6 +10,10 @@ class MainController extends Controller{
         // Controllers
     }
 
+    public function apitesting($id = null){
+        view('./views/apitesting.php',compact('id'));
+    }
+
     public function home() {
         view('./views/index.php');
     }

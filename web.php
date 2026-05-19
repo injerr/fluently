@@ -1,11 +1,18 @@
 <?php
-include_once './Route.php';
+include_once './src/fluently/Route.php';
 require_once './controllers/MainController.php';
 require_once './controllers/UserController.php';
 
 Route::get('/',[MainController::class,'home']);
 Route::get('/random',[MainController::class,'random']);
 Route::get('/redirect',[MainController::class,'redirect']);
+Route::get('/apitest',function() {
+    view('./views/apitesting.php');
+});
+
+Route::post('/apitest/{id}',[MainController::class,'apitesting']);
+Route::put('/apitest/{id}',[MainController::class,'apitesting']);
+Route::delete('/apitest/{id}',[MainController::class,'apitesting']);
 
 Route::get('/random/{some}',[MainController::class,'random']);
 
@@ -17,4 +24,4 @@ Route::get('/random/{some}',[MainController::class,'random']);
 
 Route::get('/crear',[UserController::class,'create']);
 
-Route::fallback([MainController::class,'err404']);
+// Route::fallback([MainController::class,'err404']);

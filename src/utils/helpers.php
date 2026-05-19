@@ -12,11 +12,11 @@ if (! function_exists('view')) {
             extract($content);
         }
 
-        include_once('./views/comps/header/header.php');
-        include_once('./views/comps/navbar/nav.php');
+        // include_once('./views/comps/header/header.php');
+        // include_once('./views/comps/navbar/nav.php');
         if ($template != null){
             include($template);
         }
-        include_once('./views/comps/footer/footer.php');
+        // include_once('./views/comps/footer/footer.php');
     }
 }
