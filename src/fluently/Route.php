@@ -68,10 +68,45 @@ class Route {
     public static function resolve(Request $request){
         $method = $request->method();
         $path = $request->requestUri();
-        $callback = self::$routes[$method][$path] ?? null;
-        if ($callback != null) {
-            self::handleClassMethod($callback[0],$callback[1],self::getParams($request->requestUri()));
+        // $callback = self::$routes[$method][$path] ?? null;
+        // if ($callback != null) {
+        //     self::handleClassMethod($callback[0],$callback[1],self::getParams($request->requestUri()));
+        // }
+        $matched = false;
+        var_dump(self::$routes[$method]);
+        foreach (self::$routes[$method] as $routePath => $callback) {
+           echo $routePath;
+           echo $path;
+            if ($routePath === $path) {
+                self::handleClassMethod($callback[0],$callback[1],self::getParams($request->requestUri()));
+                $matched = true;
+                break;
+            }
+
+            if(self::match($routePath,$path)){
+                self::handleClassMethod($callback[0],$callback[1],self::getParams($request->requestUri()));
+                $matched = true;
+            }
+
+            if ($matched) {
+                break;
+            }
         }
+    }
+
+    public static function match($routePath,$path): bool{
+        $requestSegments = explode("/",$_SERVER['REQUEST_URI']);
+        $segments = explode("/",$path);
+
+        if (count($segments) !== count($requestSegments)) {
+            return false;
+        }
+        foreach ($segments as $i => $segment) {
+            if (!str_contains($segment,"{") && $segment !== $requestSegments[$i]) {
+                return false;
+            }
+        }
+        return true;
     }
     // public static function post($path,$callback){
 
