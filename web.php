@@ -23,5 +23,7 @@ Route::get('/prueba',function (){
 Route::get('/random/{some}',[MainController::class,'random']);
 
 Route::get('/crear',[UserController::class,'create']);
-
+Route::get('/docs', function() {
+    return view('./views/docs/index.php');
+});
 // Route::fallback([MainController::class,'err404']);
