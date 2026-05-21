@@ -67,123 +67,73 @@ class Route {
     }
     public static function resolve(Request $request){
         $method = $request->method();
-        $path = $request->requestUri();
-        // $callback = self::$routes[$method][$path] ?? null;
+        $requestPath = $request->requestUri();
+        // $callback = self::$routes[$method][$requestPath] ?? null;
         // if ($callback != null) {
         //     self::handleClassMethod($callback[0],$callback[1],self::getParams($request->requestUri()));
         // }
         $matched = false;
-        var_dump(self::$routes[$method]);
         foreach (self::$routes[$method] as $routePath => $callback) {
-           echo $routePath;
-           echo $path;
-            if ($routePath === $path) {
-                self::handleClassMethod($callback[0],$callback[1],self::getParams($request->requestUri()));
-                $matched = true;
+
+            if(self::match($routePath,$requestPath)){
+                $params = self::getParams($routePath,$request->requestUri());
+                if (is_callable($callback)) {
+                    self::handleCallback($callback);
+                    $matched = true;
+                    break;
+                }
+                if (class_exists($callback[0])) {
+                    self::handleClassMethod($callback[0],$callback[1],$params);
+                    $matched = true; 
+                    break;
+                }
                 break;
             }
+        }
 
-            if(self::match($routePath,$path)){
-                self::handleClassMethod($callback[0],$callback[1],self::getParams($request->requestUri()));
-                $matched = true;
-            }
+        if (!$matched) {
+            if (isset(self::$routes["FALLBACK"])) {
+                $callback = self::$routes["FALLBACK"];
+                $params = self::getParams($routePath,$request->requestUri());
+                if (is_callable($callback)) {
+                    self::handleCallback($callback);
 
-            if ($matched) {
-                break;
+                }else if (class_exists($callback[0])) {
+                    self::handleClassMethod($callback[0],$callback[1],$params);
+                }
+            }else{
+                view('./src/utils/default404.php');
             }
         }
     }
 
     public static function match($routePath,$path): bool{
-        $requestSegments = explode("/",$_SERVER['REQUEST_URI']);
-        $segments = explode("/",$path);
+        $match = true;
+        if ($routePath === $path) { return $match; }
+        $segments =  explode("/",$routePath);
+        $requestSegments = explode("/",$path);
+
+        $requestSegments = array_filter($requestSegments, function ($value) {
+            return $value !== "";
+        });
+
+        $segments = array_filter($segments, function ($value) {
+            return $value !== "";
+        });
 
         if (count($segments) !== count($requestSegments)) {
-            return false;
+            $match = false;
         }
         foreach ($segments as $i => $segment) {
             if (!str_contains($segment,"{") && $segment !== $requestSegments[$i]) {
-                return false;
+                $match = false;
             }
         }
-        return true;
+        return $match;
     }
-    // public static function post($path,$callback){
 
-    //     //Si ya ha habido match en la ruta devolvemos
-    //     if (self::$matched) return;
-    //     if ($_SERVER['REQUEST_METHOD'] !== "POST") return;
-
-    //     //Extraer todas los segmentos de la url
-    //     [$params,$path] = self::matchRoute($path);
- 
-    //     //Comprobación de variables tipo {id}
-    //     if ($_SERVER['REQUEST_URI'] == $path || $_SERVER['REQUEST_URI'] == $path."/") {
-
-    //         if (self::handleCallback($callback)) return;
-
-    //         $class = $callback[0];
-    //         $method = $callback[1];
-
-    //         if (class_exists($class)) { self::handleClassMethod($class,$method,$params); }
-    //     }
-    // }
-    
-    // public static function put($path,$callback){
-
-    //     //Si ya ha habido match en la ruta devolvemos
-    //     if (self::$matched) return;
-    //     if ($_SERVER['REQUEST_METHOD'] !== "PUT" || $_POST['_method'] !== "PUT") return;
-
-    //     //Extraer todas los segmentos de la url
-    //     [$params,$path] = self::matchRoute($path);
- 
-    //     //Comprobación de variables tipo {id}
-    //     if ($_SERVER['REQUEST_URI'] == $path || $_SERVER['REQUEST_URI'] == $path."/") {
-
-    //         if (self::handleCallback($callback)) return;
-
-    //         $class = $callback[0];
-    //         $method = $callback[1];
-
-    //         if (class_exists($class)) { self::handleClassMethod($class,$method,$params); }
-    //     }
-    // }
-
-    // public static function delete($path,$callback){
-
-    //     //Si ya ha habido match en la ruta devolvemos
-    //     if (self::$matched) return;
-
-    //     if ($_SERVER['REQUEST_METHOD'] !== "DELETE" || $_POST['_method'] !== "DELETE") return;
-
-    //     //Extraer todas los segmentos de la url
-    //     [$params,$path] = self::matchRoute($path);
- 
-    //     //Comprobación de variables tipo {id}
-    //     if ($_SERVER['REQUEST_URI'] == $path || $_SERVER['REQUEST_URI'] == $path."/") {
-
-    //         if (self::handleCallback($callback)) return;
-
-    //         $class = $callback[0];
-    //         $method = $callback[1];
-
-    //         if (class_exists($class)) { self::handleClassMethod($class,$method,$params); }
-    //     }
-    // }
-
-    public static function fallback($callback){
-        if (!self::$matched) {
-            if (self::handleCallback($callback)) return;
-
-            if (class_exists($callback[0])) {
-                $method = $callback[1];
-                $ob = new $callback[0];
-                $ob->$method();
-                unset($ob);
-                exit;
-            }
-        }
+    public static function fallback($callback) {
+        self::$routes["FALLBACK"] = $callback;
     }
 
     public static function handleClassMethod($class,$method,$params) {
@@ -225,37 +175,17 @@ class Route {
 
         return false;
     }
-
-    public static function matchRoute($path) {
-        $params = [];
-        $requestSegments = explode("/",$_SERVER['REQUEST_URI']);
-        $segments = explode("/",$path);
-
-        if (count($segments) !== count($requestSegments)) {
-            self::$matched = false;
-            return;
-        }
-
-        foreach ($segments as $i => $segment) {
-            if (str_starts_with($segment,"{") & str_ends_with($segment,"}")){
-                $keyname = str_replace(["{","}"],"",$segment);
-                $segments[$i] = $requestSegments[$i];
-                $params[$keyname] = $segments[$i];
-            }
-        }
-        $path = implode("/",$segments);
-        $_SERVER['REQUEST_URI'] = implode("/",$requestSegments);
-        return [$params,$path];
-    }
     
-    public static function getParams($path) {
+    public static function getParams($path,$requestPath) {
         $params = [];
-        $requestSegments = explode("/",$_SERVER['REQUEST_URI']);
+        $requestSegments = explode("/",$requestPath);
         $segments = explode("/",$path);
-
-        if (count($segments) !== count($requestSegments)) {
-            return;
-        }
+        $segments = array_filter($segments, function ($value) {
+            return $value !== "";
+        });
+        $requestSegments = array_filter($requestSegments, function ($value) {
+            return $value !== "";
+        });
 
         foreach ($segments as $i => $segment) {
             if (str_starts_with($segment,"{") & str_ends_with($segment,"}")){
@@ -264,9 +194,7 @@ class Route {
                 $params[$keyname] = $segments[$i];
             }
         }
-        $path = implode("/",$segments);
-        $_SERVER['REQUEST_URI'] = implode("/",$requestSegments);
         return $params;
     }
-}
 
+}
