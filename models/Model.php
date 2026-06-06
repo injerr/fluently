@@ -10,45 +10,57 @@ abstract class Model {
         return $stmt->fetchAll();
     }
 
-    //En proceso
-    public static function create(array $params) {
-        $class = static::class;
-        $db = Database::conectar();
+    public static function create(array $data){
+        $classname = static::class; // we get the classname
+        $tablename = self::getTable();
+        $db = Database::conectar(); // we get the conecction with the database
         $values = [];
-        
-        foreach ($params as $key => $value) {
-            $values[] = $value;
+
+        $fillable = self::getFillable(); // Returns the fillable if exists
+        foreach ($fillable as $column) { // sorting the values
+            if ($data[$column] == null) { continue; };
+            $values[$column] = $data[$column];
         }
 
-        $table = self::getTable($class);
-        $fillable = implode(",",self::getFillable($class));
-
+        // TO DO Verificaciones required, tipos, etc...
         $placeholders = [];
-        foreach (self::getFillable($class) as $key => $value) {
+        foreach ($values as $column => $value) {
             $placeholders[] = '?';
         }
+
+        $columns = implode(',',array_keys($values));
+        $insertValues = array_values($values);
         $placeholders = implode(", ", $placeholders);
-        $sql = "INSERT INTO $table ($fillable) VALUES ($placeholders)";
+
+        $sql = "INSERT INTO $tablename ($columns) VALUES ($placeholders)";
         $stmt = $db->prepare($sql);
-        $stmt->execute($values);
+        $stmt->execute($insertValues);
     }
 
-    public static function getTable($class) : string {
+    /**
+     * This function returns the tablename of the class given
+     * 
+     * @param $class is the classname of the model we want to get its table
+     * @return string $tablename;
+     */
+    public static function getTable() : string {
+        $class = static::class;
         $obj = new ReflectionClass($class);
 
         if ($obj->hasProperty('table')) {
             $prop = $obj->getProperty('table');
-            $table = $prop->getValue();
+            $tablename = $prop->getValue();
         } else {
-            $table = strtolower($class) . 's';
+            $tablename = strtolower($class) . 's';
         }
 
-        return $table;
+        return $tablename;
     }
 
     //En proceso
-    public static function getFillable($class) : array {
-        $obj = new ReflectionClass($class);
+    public static function getFillable() : array {
+        $obj = new ReflectionClass(static::class);
+        $fillable = [];
 
         if ($obj->hasProperty('fillable')) {
             $prop = $obj->getProperty('fillable');

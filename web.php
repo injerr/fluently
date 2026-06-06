@@ -26,4 +26,6 @@ Route::get('/crear',[UserController::class,'create']);
 Route::get('/docs', function() {
     return view('./views/docs/index.php');
 });
+
+Route::get('/response',[UserController::class,'mostrarLista']);
 // Route::fallback([MainController::class,'err404']);

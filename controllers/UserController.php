@@ -14,14 +14,22 @@ class UserController extends Controller{
     public function create() {
         User::create([
             'id' => null,
+            'password' => 'password',
             'user' => 'Jeremy',
-            'password' => 'Jeremy'
+            'NoExiste' => 'EnFillables'
         ]);
         view('./views/index.php');
     }
 
     public function mostrarLista() {
         //
+        httpResponse()->json([
+            'Hola' => 'Prueba',
+            'Dos' => [
+                'hola2' => 'asdas'
+            ],
+            'Treh' => 'jasdj'
+        ]);
     }
 
     public function mostrarFormulario($id = null) {

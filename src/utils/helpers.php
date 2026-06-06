@@ -20,3 +20,8 @@ if (! function_exists('view')) {
         // include_once('./views/comps/footer/footer.php');
     }
 }
+if (!function_exists('httpResponse')) {
+    function httpResponse(){
+        return new Response();
+    }
+}
