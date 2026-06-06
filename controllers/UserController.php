@@ -15,7 +15,7 @@ class UserController extends Controller{
         User::create([
             'id' => null,
             'password' => 'password',
-            'user' => 'Jeremy',
+            'user' => 'Random2',
             'NoExiste' => 'EnFillables'
         ]);
         view('./views/index.php');
@@ -29,7 +29,11 @@ class UserController extends Controller{
                 'hola2' => 'asdas'
             ],
             'Treh' => 'jasdj'
-        ]);
+        ],401);
+    }
+
+    public function getById($id) {
+        httpResponse()->json(User::find($id));
     }
 
     public function mostrarFormulario($id = null) {

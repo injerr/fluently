@@ -28,4 +28,5 @@ Route::get('/docs', function() {
 });
 
 Route::get('/response',[UserController::class,'mostrarLista']);
+Route::get('/user/{id}',[UserController::class,'getById']);
 // Route::fallback([MainController::class,'err404']);

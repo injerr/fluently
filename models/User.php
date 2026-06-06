@@ -2,9 +2,9 @@
 require 'models/Model.php';
 class User extends Model {
 
-    protected static $primaryKey = 'id';
-    protected static $table = "users";
-    protected static $fillable = [
+    protected static string $primaryKey = 'id';
+    protected static string $table = "users";
+    protected static array $fillable = [
         'id',
         'user',
         'password'

@@ -1,6 +1,9 @@
 <?php
 
 abstract class Model {
+    protected static string $primaryKey = 'id';
+    protected static string $table;
+    protected static array $fillable;
 
     public static function all() {
         $class = static::class;
@@ -11,9 +14,8 @@ abstract class Model {
     }
 
     public static function create(array $data){
-        $classname = static::class; // we get the classname
         $tablename = self::getTable();
-        $db = Database::conectar(); // we get the conecction with the database
+        $db = Database::conectar(); // we get the connection with the database
         $values = [];
 
         $fillable = self::getFillable(); // Returns the fillable if exists
@@ -37,6 +39,17 @@ abstract class Model {
         $stmt->execute($insertValues);
     }
 
+    public static function find($id) {
+        $table = static::$table;
+        $primaryKey = static::$primaryKey;
+        $db = Database::conectar();
+
+        $sql = "SELECT * FROM $table WHERE $primaryKey = ?";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$id]);
+        return $stmt->fetch() ?: null;
+    }
+
     /**
      * This function returns the tablename of the class given
      * 
@@ -45,28 +58,15 @@ abstract class Model {
      */
     public static function getTable() : string {
         $class = static::class;
-        $obj = new ReflectionClass($class);
-
-        if ($obj->hasProperty('table')) {
-            $prop = $obj->getProperty('table');
-            $tablename = $prop->getValue();
-        } else {
-            $tablename = strtolower($class) . 's';
-        }
-
-        return $tablename;
+        return static::$table ?? strtolower($class) . 's';
     }
 
     //En proceso
     public static function getFillable() : array {
-        $obj = new ReflectionClass(static::class);
-        $fillable = [];
+        return static::$fillable ?? [];
+    }
 
-        if ($obj->hasProperty('fillable')) {
-            $prop = $obj->getProperty('fillable');
-            $fillable = $prop->getValue();
-        }
-
-        return $fillable;
+    public function getPrimaryKey() : string {
+        return static::$primaryKey ?? 'id';
     }
 }
