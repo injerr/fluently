@@ -6,9 +6,9 @@ abstract class Model {
     protected static array $fillable;
 
     public static function all() {
-        $class = static::class;
-        $table = self::getTable($class);
+        $table = self::getTable();
         $db = Database::conectar();
+        
         $stmt = $db->query("SELECT * FROM $table");
         return $stmt->fetchAll();
     }
@@ -53,7 +53,6 @@ abstract class Model {
     /**
      * This function returns the tablename of the class given
      * 
-     * @param $class is the classname of the model we want to get its table
      * @return string $tablename;
      */
     public static function getTable() : string {
@@ -61,11 +60,20 @@ abstract class Model {
         return static::$table ?? strtolower($class) . 's';
     }
 
-    //En proceso
+    /**
+     * This function returns the fillable columns of the class/model given
+     * 
+     * @return array $fillable;
+     */
     public static function getFillable() : array {
         return static::$fillable ?? [];
     }
 
+    /**
+     * This function returns the primary key  of the class/model given
+     * 
+     * @return string $primaryKey;
+     */
     public function getPrimaryKey() : string {
         return static::$primaryKey ?? 'id';
     }
