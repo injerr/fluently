@@ -21,13 +21,12 @@ class UserController extends Controller{
 
     public function mostrarLista() {
         //
-        httpResponse()->json([
-            'Hola' => 'Prueba',
-            'Dos' => [
-                'hola2' => 'asdas'
-            ],
-            'Treh' => 'jasdj'
-        ],401);
+        $data = [];
+        $users = User::all();
+        foreach ($users as $user) {
+            array_push($data,$user->user);
+        }
+        httpResponse()->json($data,200);
     }
 
     public function getById($id) {
@@ -38,9 +37,25 @@ class UserController extends Controller{
         //
     }
 
-    public function procesar() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            //
+    public function update(int $id) {
+        $user = User::find($id);
+        if ($user != null) {
+            $old_user = $user;
+            User::update([
+                'password'=>'Jeremy123'
+            ],$id);
+
+            $new_user = User::find($id);
+            httpResponse()->json([
+                'Old_user' => $old_user,
+                'New_user_2' => [
+                    'id' => $new_user->id,
+                    'user' => $new_user->user,
+                    'password' => $new_user->password
+                ]
+            ]);
+        }else{
+            return httpResponse()->json(['message'=>'Hello']);
         }
     }
 

@@ -32,5 +32,6 @@ Route::get('/users', function() {
     return httpResponse()->json(User::all());
 });
 Route::get('/user/{id}',[UserController::class,'getById']);
+Route::put('/user/{id}',[UserController::class,'update']);
 Route::delete('/user/{id}',[UserController::class,'borrar']);
 // Route::fallback([MainController::class,'err404']);

@@ -12,7 +12,7 @@ class Database {
             $dsn = $_ENV['DB_CONNECTION'].":host=".$_ENV['DB_HOST'].";dbname=".$_ENV['DB_NAME'].";charset=utf8mb4";
                 self::$connection = new PDO($dsn, $_ENV['DB_USER'], $_ENV['DB_PASSWORD'], [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ, //PDO::FETCH_OBJ hace que el fetch devuelva siempre objeto el dato como objeto
                 PDO::ATTR_EMULATE_PREPARES => false
             ]);
 

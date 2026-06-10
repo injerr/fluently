@@ -39,6 +39,45 @@ abstract class Model {
         $stmt->execute($insertValues);
     }
 
+    public static function update(mixed $data, int $id){
+        // $id = 1; // Need to do a var for an instanced object
+        $tablename = self::getTable();
+        $primaryKey = self::getPrimaryKey();
+        $db = getDBConnection();
+        $values = [];
+
+        $fillable = self::getFillable();
+        foreach ($fillable as $column) { 
+            if (array_key_exists($column,$data)) {
+                if ($data[$column] == null) { continue; };
+                $values[$column] = $data[$column];
+            }else{
+                continue;
+            }
+            
+        }
+
+        // TO DO Verificaciones required, tipos, etc...
+        // $placeholders = [];
+        // foreach ($values as $column => $value) {
+        //     $placeholders[] = '?';
+        // }
+   
+        $UPDATEVALUES = []; // format : key = ?,
+        foreach ($values as $column => $value) {
+            $insertValue = $value;
+            if (is_string($value)) {
+                $insertValue = "'$value'";
+            }
+            $UPDATEVALUES[] = $column." = ".$insertValue;
+        }
+        $updateStream = implode(',', $UPDATEVALUES);
+        print_r($updateStream);
+        $sql = "UPDATE $tablename SET $updateStream WHERE $primaryKey = ?";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$id]);
+    }
+
     public static function destroy(int $id){
         $table = static::$table;
         $primaryKey = static::$primaryKey;
@@ -55,9 +94,11 @@ abstract class Model {
         $primaryKey = static::$primaryKey;
         $db = getDBConnection();
 
-        $sql = "SELECT * FROM $table WHERE $primaryKey = ?";
+        $sql = "SELECT * FROM $table WHERE $primaryKey = ?";        
         $stmt = $db->prepare($sql);
         $stmt->execute([$id]);
+
+        $stmt->setFetchMode(PDO::FETCH_OBJ);
         return $stmt->fetch() ?: null;
     }
 
@@ -85,7 +126,7 @@ abstract class Model {
      * 
      * @return string $primaryKey;
      */
-    public function getPrimaryKey() : string {
+    public static function getPrimaryKey() : string {
         return static::$primaryKey ?? 'id';
     }
 }
