@@ -7,7 +7,6 @@ class App{
         try {
             session_start();
             $request = new Request(); 
-            
             require_once './web.php';
             Route::resolve($request);
         } catch (\Throwable $th) {

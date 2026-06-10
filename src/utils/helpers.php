@@ -25,3 +25,9 @@ if (!function_exists('httpResponse')) {
         return new Response();
     }
 }
+
+if (!function_exists('getDBConnection')) {
+    function getDBConnection(){
+        return Database::conectar();
+    }
+}

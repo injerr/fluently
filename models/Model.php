@@ -7,7 +7,7 @@ abstract class Model {
 
     public static function all() {
         $table = self::getTable();
-        $db = Database::conectar();
+        $db = getDBConnection();
         
         $stmt = $db->query("SELECT * FROM $table");
         return $stmt->fetchAll();
@@ -15,7 +15,7 @@ abstract class Model {
 
     public static function create(array $data){
         $tablename = self::getTable();
-        $db = Database::conectar(); // we get the connection with the database
+        $db = getDBConnection(); // we get the connection with the database
         $values = [];
 
         $fillable = self::getFillable(); // Returns the fillable if exists
@@ -39,10 +39,21 @@ abstract class Model {
         $stmt->execute($insertValues);
     }
 
+    public static function destroy(int $id){
+        $table = static::$table;
+        $primaryKey = static::$primaryKey;
+        $db = getDBConnection();
+
+        $sql = "DELETE FROM $table WHERE $primaryKey = ?";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$id]);
+        return $stmt->rowCount() > 0;
+    } 
+
     public static function find($id) {
         $table = static::$table;
         $primaryKey = static::$primaryKey;
-        $db = Database::conectar();
+        $db = getDBConnection();
 
         $sql = "SELECT * FROM $table WHERE $primaryKey = ?";
         $stmt = $db->prepare($sql);

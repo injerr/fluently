@@ -28,5 +28,9 @@ Route::get('/docs', function() {
 });
 
 Route::get('/response',[UserController::class,'mostrarLista']);
+Route::get('/users', function() {
+    return httpResponse()->json(User::all());
+});
 Route::get('/user/{id}',[UserController::class,'getById']);
+Route::delete('/user/{id}',[UserController::class,'borrar']);
 // Route::fallback([MainController::class,'err404']);

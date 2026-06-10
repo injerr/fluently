@@ -3,12 +3,10 @@ require_once 'models/User.php';
 require_once 'Controller.php';
 
 class UserController extends Controller{
-    private User $modelo;
     private PDO $db;
 
     public function __construct() {
-        $this->db = Database::conectar();
-        $this->modelo = new User($this->db);
+        $this->db = getDBConnection();
     }
 
     public function create() {
@@ -46,7 +44,12 @@ class UserController extends Controller{
         }
     }
 
-    public function borrar($id) {
+    public function borrar(int $id) {
         //
+        if(User::destroy($id)){
+            return httpResponse()->json(['message'=>'deleted']);
+        }
+
+        return httpResponse()->json(['message'=>'The element requested doesn\'t exist']);
     }
 }
