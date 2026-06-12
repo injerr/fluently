@@ -46,7 +46,7 @@ class UserController extends Controller{
             ],$id);
 
             $new_user = User::find($id);
-            httpResponse()->json([
+            return httpResponse()->json([
                 'Old_user' => $old_user,
                 'New_user_2' => [
                     'id' => $new_user->id,
