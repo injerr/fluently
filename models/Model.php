@@ -5,6 +5,13 @@ abstract class Model {
     protected static string $table;
     protected static array $fillable;
 
+    public static function __callStatic($method, $args){
+
+        $builder = new Query(static::$table);
+
+        return $builder->$method(...$args);
+    }
+
     public static function all() {
         $table = self::getTable();
         $db = getDBConnection();
@@ -36,7 +43,7 @@ abstract class Model {
 
         $sql = "INSERT INTO $tablename ($columns) VALUES ($placeholders)";
         $stmt = $db->prepare($sql);
-        $stmt->execute($insertValues);
+        return $stmt->execute($insertValues);
     }
 
     public static function update(mixed $data, int $id){

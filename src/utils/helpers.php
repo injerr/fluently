@@ -27,7 +27,7 @@ if (!function_exists('httpResponse')) {
 }
 
 if (!function_exists('getDBConnection')) {
-    function getDBConnection(){
+    function getDBConnection(): PDO{
         return Database::conectar();
     }
 }
