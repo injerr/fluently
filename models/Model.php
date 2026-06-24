@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @method static Query where(string $column, string $operator, mixed $value)
+ */
 abstract class Model {
     protected static string $primaryKey = 'id';
     protected static string $table;
@@ -10,14 +12,6 @@ abstract class Model {
         $builder = new Query(static::$table);
 
         return $builder->$method(...$args);
-    }
-
-    public static function all() {
-        $table = self::getTable();
-        $db = getDBConnection();
-        
-        $stmt = $db->query("SELECT * FROM $table");
-        return $stmt->fetchAll();
     }
 
     public static function create(array $data){

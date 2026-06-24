@@ -67,4 +67,15 @@ class UserController extends Controller{
 
         return httpResponse()->json(['message'=>'The element requested doesn\'t exist']);
     }
+
+    public function querys() {
+        // $users = User::where('id','>=',7)->get();
+        // ob_start();
+        // foreach ($users as $user) {
+        //     echo "<p>id:".$user->id.", user: ".$user->user."</p>";    
+        // }
+        // echo ob_get_clean();
+
+        httpResponse()->json(User::where('id','>=',7)->first(),200);
+    }
 }

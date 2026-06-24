@@ -39,8 +39,9 @@ Route::put('/user/{id}',[UserController::class,'update']);
 Route::delete('/user/{id}',[UserController::class,'borrar']);
 // Route::fallback([MainController::class,'err404']);
 Route::get('/usersbyquery', function() {
-    return httpResponse()->json(User::where("id",">=",7)->orderBy('user','asc')->get(['id','user']));
+    return httpResponse()->json(User::where('id','>=',7)->orderBy('user','asc')->get(['id','user']));
 });
-// Route::get('/usersbyquery', function() {
-//     return httpResponse()->json(User::where("user","=","jeremy")->orderBy('user','asc')->get(['id','user']));
-// });
+// Route::get('/usersbyquery2', [UserController::class,'querys']);
+Route::get('/usersbyquery2', function () {
+    httpResponse()->json(User::insertGetId(['id' => null, 'user' => null, 'password' => 'None']));
+});
