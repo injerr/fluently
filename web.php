@@ -43,5 +43,8 @@ Route::get('/usersbyquery', function() {
 });
 // Route::get('/usersbyquery2', [UserController::class,'querys']);
 Route::get('/usersbyquery2', function () {
-    httpResponse()->json(User::insertGetId(['id' => null, 'user' => null, 'password' => 'None']));
+    httpResponse()->json(['id' => User::insertGetId(['user' => '30-06-26', 'password' => 'Ugu'])]);
+});
+Route::get('/groupby', function () {
+    httpResponse()->json(Query::table('productos')->get(['nombre','precio']));
 });

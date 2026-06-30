@@ -5,6 +5,8 @@ class Query {
     private string $orderColumn;
     private string $orderDirection = 'asc';
     private array $wheres = [];
+    private bool $count = false;
+    private string|array $groups = [];
     private string $method = "SELECT";
     private PDO $db;
 
@@ -14,7 +16,7 @@ class Query {
     }
 
     // Este en todo caso deberia ir en utils al igual que httpResponse
-    public static function table(string $tablename) {
+    public static function table(string $tablename): Query {
         $query = new Query($tablename); 
         return $query;
     }
@@ -36,7 +38,22 @@ class Query {
         $this->orderDirection = $direction;
         return $this;
     }
+
+    // TO DO
+    // public function groupBy(string | array $columns): Query  {
+    //     if (!empty($columns)) {
+    //         $this->groups = $columns;
+    //     }
+        
+    //     return $this;
+    // }
     
+    // TODO
+    // public function count() : Query {
+    //     $this->count = true;
+    //     return $this;
+    // }
+
     /**
      * This functions prepares the where condition for the query
      * 
@@ -69,15 +86,14 @@ class Query {
         if (is_array($column)) {
             $column = implode(",",$column);
         }
-        
                 
+        $groups = is_array($this->groups) ? implode(",",$this->groups) : $this->groups;
+        $groupby = !empty($this->groups) ? "GROUP BY ({$groups})" : "";
         $order = isset($this->orderColumn) ? "ORDER BY {$this->orderColumn} {$this->orderDirection}" : "";
         $where = $this->wheres != [] ? "WHERE ".implode(",",$this->wheres) : '' ;
-        
-        $query = "SELECT $column FROM {$this->table} $where $order";
+        $query = "SELECT $column FROM {$this->table} $where $order $groupby";
             
         // $query = "{$this->method} * FROM {$this->table}";
-
         $stmt = $this->db->query($query);
         return $stmt->fetchAll();
     }
@@ -110,29 +126,36 @@ class Query {
         //TODO
     }
 
-    public function insert(){
-        //TODO
+    public function insert(mixed $data){
+        $this->db->beginTransaction();
+        $tablename = $this->table;
+
+        $placeholders = [];
+        for ($i = 0; $i < count($data) ; $i++) { 
+            $placeholders[] = '?';
+        }
+
+        $columns = implode(',',array_keys($data));
+        $insertValues = array_values($data);
+        $placeholders = implode(",", $placeholders);
+
+        $sql = "INSERT INTO $tablename ($columns) VALUES ($placeholders)";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($insertValues);
+        return $this->db->commit();
     }
 
     public function insertGetId(mixed $data){
         $tablename = $this->table;
-        $values = [];
 
-        $fillable = DB::getTableColumns($tablename); // Returns the fillable if exists
-        foreach ($fillable as $column) { // sorting the values
-            if ($data[$column] == null) { continue; };
-            $values[$column] = $data[$column];
-        }
-
-        // TO DO Verificaciones required, tipos, etc...
         $placeholders = [];
-        foreach ($values as $column => $value) {
+        for ($i = 0; $i < count($data) ; $i++) { 
             $placeholders[] = '?';
         }
 
-        $columns = implode(',',array_keys($values));
-        $insertValues = array_values($values);
-        $placeholders = implode(", ", $placeholders);
+        $columns = implode(',',array_keys($data));
+        $insertValues = array_values($data);
+        $placeholders = implode(",", $placeholders);
 
         $sql = "INSERT INTO $tablename ($columns) VALUES ($placeholders)";
         $stmt = $this->db->prepare($sql);
@@ -143,10 +166,10 @@ class Query {
     /**
      * This function returns all the objects of the model (it can only be called from a model like User::all()
      * 
-     * @param mixed $column By default '*' returns all columns, it can be an string or array of strings of the names of the columns to return
+     * @return $data returns all the objects of <T>
      */
-    public function all(mixed $column = '*') {
-        return $this->get($column);
+    public function all() {
+        return $this->get("*");
     }
 
 }
