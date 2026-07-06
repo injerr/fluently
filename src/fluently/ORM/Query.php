@@ -8,6 +8,7 @@ class Query {
     private bool $count = false;
     private string|array $groups = [];
     private string $method = "SELECT";
+    private array $selectColumns = [];
     private PDO $db;
 
     public function __construct(?string $table = ''){
@@ -39,14 +40,21 @@ class Query {
         return $this;
     }
 
+    public function select(string ...$columns){
+        foreach ($columns as $col) {
+            $this->selectColumns[] = $col;
+        }
+        return $this;
+    }
+
     // TO DO
-    // public function groupBy(string | array $columns): Query  {
-    //     if (!empty($columns)) {
-    //         $this->groups = $columns;
-    //     }
+    public function groupBy(string | array $columns): Query  {
+        if (!empty($columns)) {
+            $this->groups = $columns;
+        }
         
-    //     return $this;
-    // }
+        return $this;
+    }
     
     // TODO
     // public function count() : Query {
@@ -80,8 +88,11 @@ class Query {
      * @param $column By default '*' returns all columns, it can be an string or array of strings of the names of the columns to return
      * @return array $objectlist It returns the object of the sql query once executed 
      */
-    public function get($column = '*'): array {
+    public function get(mixed $column = '*'): array {
         $query = "";
+        if (isset($this->selectColumns)) {
+            $column = implode(",",$this->selectColumns);
+        }
 
         if (is_array($column)) {
             $column = implode(",",$column);
@@ -168,8 +179,8 @@ class Query {
      * 
      * @return $data returns all the objects of <T>
      */
-    public function all() {
-        return $this->get("*");
+    public function all(mixed $column = '*') {
+        return $this->get($column);
     }
 
 }

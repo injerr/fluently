@@ -46,5 +46,10 @@ Route::get('/usersbyquery2', function () {
     httpResponse()->json(['id' => User::insertGetId(['user' => '30-06-26', 'password' => 'Ugu'])]);
 });
 Route::get('/groupby', function () {
-    httpResponse()->json(Query::table('productos')->get(['nombre','precio']));
+    return httpResponse()->json(
+        Query::table('productos')
+        ->select('categoria',DB::raw('SUM(precio) as Total'))
+        ->groupBy('categoria')
+        ->get()
+    );
 });
