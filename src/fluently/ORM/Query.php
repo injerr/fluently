@@ -90,7 +90,7 @@ class Query {
      */
     public function get(mixed $column = '*'): array {
         $query = "";
-        if (isset($this->selectColumns)) {
+        if (!empty($this->selectColumns)) {
             $column = implode(",",$this->selectColumns);
         }
 
