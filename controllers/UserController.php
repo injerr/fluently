@@ -16,7 +16,7 @@ class UserController extends Controller{
             'user' => 'Random2',
             'NoExiste' => 'EnFillables'
         ]);
-        view('./views/index.php');
+        view('index');
     }
 
     public function mostrarLista() {

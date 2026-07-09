@@ -1,7 +1,5 @@
-<?php
-include_once('./views/comps/header/header.php');
-include_once('./views/comps/navbar/nav.php');
-?>
+@include('comps/header/header')
+@include('comps/navbar/nav')
 
 <div class="container">
     <div class="fw-bold">RANDOM</div>
@@ -21,8 +19,7 @@ if (class_exists($class)) {
     $ob = new $class();
     $ob->random();
 }
-
-echo "<br/>";
-echo $some; 
-
-echo '<pre>';
+?>
+<div>
+    {{ $some }}
+</div>

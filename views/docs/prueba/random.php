@@ -1,0 +1,4 @@
+<div>
+    Hola
+    <?= "dinamico" ?>
+</div>

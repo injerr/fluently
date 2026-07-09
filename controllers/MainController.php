@@ -11,15 +11,15 @@ class MainController extends Controller{
     }
 
     public function apitesting($id = null){
-        view('./views/apitesting.php',compact('id'));
+        view('apitesting',compact('id'));
     }
 
     public function home() {
-        view('./views/index.php');
+        view('index');
     }
 
     public function random($some = null) {
-        view('./views/random.php',compact('some'));
+        view('random',compact('some'));
     }
 
     public function redirect() {
@@ -27,7 +27,7 @@ class MainController extends Controller{
     }
 
     public function err404(){
-        view('./views/comps/404/404.php');
+        view('comps.404.404');
     }
 
 }

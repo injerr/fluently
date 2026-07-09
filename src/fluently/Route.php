@@ -112,6 +112,7 @@ class Route {
         self::$matched = true;
     }
 
+    // ARREGLAR PARA QUE LA FUNCION TAMBIEN TENGA VARS
     public static function handleCallback($callback) {
         if (is_callable($callback)) {
             $res = $callback();

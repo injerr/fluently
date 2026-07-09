@@ -24,7 +24,7 @@ Route::get('/random/{some}',[MainController::class,'random']);
 
 Route::get('/crear',[UserController::class,'create']);
 Route::get('/docs', function() {
-    return view('./views/docs/index.php');
+    return view('docs/index');
 });
 
 Route::get('/response',[UserController::class,'mostrarLista']);
@@ -48,8 +48,16 @@ Route::get('/usersbyquery2', function () {
 Route::get('/groupby', function () {
     return httpResponse()->json(
         Query::table('productos')
-        ->select('categoria',DB::raw('SUM(precio) as Total'))
+        ->select('categoria',DB::raw('SUM(precio) as Total'),DB::raw('COUNT(*) as Items'))
         ->groupBy('categoria')
         ->get()
     );
+});
+Route::get('/viewEngine', function () {
+    $user = User::find(1);
+    return ViewEngine::transform('layout',compact('user'));
+});
+
+Route::get('/viewEngine2', function () {
+    return ViewEngine::transform('docs.prueba.random');
 });

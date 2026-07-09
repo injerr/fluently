@@ -20,7 +20,7 @@ class Request {
         return json_decode(file_get_contents('php://input'),true);
     }
 
-    public function ip() : string {
+    public static function ip() : string {
         return $_SERVER['REMOTE_ADDR'];
     }
 
