@@ -34,8 +34,20 @@ class ViewEngine{
                         //TO DO
                         return "<?php foreach($match[1] as $match[2]): ?>";
                     },
-                    "/@endforeach/" => function($match) {
+                    "/@endforeach/" => function() {
                         return "<?php endforeach; ?>";
+                    },
+                    "/@if\((.*?)\)/" => function($match) {
+                        return "<?php if($match[1]): ?>";
+                    },
+                    "/@elseif\((.*?)\)/" => function($match) {
+                        return "<?php elseif($match[1]): ?>";
+                    },
+                    "/@else/" => function() {
+                        return "<?php else: ?>";
+                    },
+                    "/@endif/" => function() {
+                        return "<?php endif; ?>";
                     },
                     "/\{\{(.*?)\}\}/" => function ($match) {
                         return "<?=$match[1]?>";
