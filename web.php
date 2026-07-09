@@ -54,8 +54,8 @@ Route::get('/groupby', function () {
     );
 });
 Route::get('/viewEngine', function () {
-    $user = User::find(1);
-    return ViewEngine::transform('layout',compact('user'));
+    $users = User::all();
+    return ViewEngine::transform('layout',compact('users'));
 });
 
 Route::get('/viewEngine2', function () {

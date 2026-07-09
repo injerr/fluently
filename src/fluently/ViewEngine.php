@@ -30,8 +30,15 @@ class ViewEngine{
                     "/@layout\(['\"](.*?)['\"]\)/" => function($match) {
                         //TO DO
                     },
+                    "/@foreach\((.*?) as (.*?)\)/" => function($match) {
+                        //TO DO
+                        return "<?php foreach($match[1] as $match[2]): ?>";
+                    },
+                    "/@endforeach/" => function($match) {
+                        return "<?php endforeach; ?>";
+                    },
                     "/\{\{(.*?)\}\}/" => function ($match) {
-                        return "<?= $match[1] ?>";
+                        return "<?=$match[1]?>";
                     }
                 ],
                 $template);

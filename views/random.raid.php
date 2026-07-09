@@ -21,5 +21,5 @@ if (class_exists($class)) {
 }
 ?>
 <div>
-    {{ $some }}
+    {{ $some  }}
 </div>
