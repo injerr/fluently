@@ -1,5 +1,5 @@
-<?php include './views/comps/header/header.php' ?>
-<?php include './views/comps/navbar/nav.php' ?>
+<?php include './views/comps\header\header.php' ?>
+<?php include './views/comps\navbar\nav.php' ?>
 
 <div class="container">
     <div class="fw-bold">RANDOM</div>

@@ -1,5 +1,5 @@
-@include('comps/header/header')
-@include('comps/navbar/nav')
+@include('comps.header.header')
+@include('comps.navbar.nav')
     <h1>Layout prueba</h1>
     <ul>
     @foreach($users as $user)
@@ -12,7 +12,6 @@
         @endif
     @endforeach
     </ul>
-    @include('docs/index')
     
 </body>
 </html>

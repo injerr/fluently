@@ -13,9 +13,10 @@ class ViewEngine{
             $viewPath = self::finder($view);
             
             if (!str_contains($viewPath,".raid.php") && $viewPath != '') {
-                ob_start();
-                include $viewPath;
-                ob_get_flush();
+                // ob_start();
+                // include $viewPath;
+                // echo ob_get_clean();
+                echo self::render($viewPath);
                 return;
             }
 
@@ -25,13 +26,14 @@ class ViewEngine{
                 [
                     "/@include\(['\"](.*?)['\"]\)/" => function($match) {
                         str_replace('.php','',$match[1]);
-                        return "<?php include './views/$match[1].php' ?>";
+                        $view = str_replace(['.', '/'], '\\', $match[1]);
+                        return "<?php include './views/$view.php' ?>";
                     },
                     "/@layout\(['\"](.*?)['\"]\)/" => function($match) {
                         //TO DO
+                        return "";
                     },
                     "/@foreach\((.*?) as (.*?)\)/" => function($match) {
-                        //TO DO
                         return "<?php foreach($match[1] as $match[2]): ?>";
                     },
                     "/@endforeach/" => function() {
@@ -58,15 +60,17 @@ class ViewEngine{
                 $compiled = './src/cache/' . $view . '.php';
                 file_put_contents($compiled, $content);
                 
-                ob_start();
-                include $compiled;
-                ob_get_flush();
+                // ob_start();
+                // include $compiled;
+                // ob_get_flush();
+                echo self::render($compiled,$data);
                 return;
             }else{
                 $template = './src/utils/defaultPages/default404.php';
-                ob_start();
-                include $template;
-                ob_get_flush();
+                // ob_start();
+                // include $template;
+                // ob_get_flush();
+                echo self::render($template,$data);
                 return;
             }
             
@@ -104,5 +108,12 @@ class ViewEngine{
 
 
         return '';
+    }
+
+    public static function render(string $view,mixed $data = null){
+        if($data != null) extract($data);
+        ob_start();
+        include $view;
+        return ob_get_clean();
     }
 }
