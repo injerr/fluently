@@ -7,7 +7,7 @@ Route::get('/',[MainController::class,'home']);
 Route::get('/random',[MainController::class,'random']);
 Route::get('/redirect',[MainController::class,'redirect']);
 Route::get('/apitest',function() {
-    view('./views/apitesting.php');
+    return view('apitesting');
 });
 
 Route::post('/apitest/{id}',[MainController::class,'apitesting']);
@@ -24,7 +24,7 @@ Route::get('/random/{some}',[MainController::class,'random']);
 
 Route::get('/crear',[UserController::class,'create']);
 Route::get('/docs', function() {
-    return view('docs/index');
+    return view('docs.index');
 });
 
 Route::get('/response',[UserController::class,'mostrarLista']);
@@ -48,16 +48,20 @@ Route::get('/usersbyquery2', function () {
 Route::get('/groupby', function () {
     return httpResponse()->json(
         Query::table('productos')
-        ->select('categoria',DB::raw('SUM(precio) as Total'),DB::raw('COUNT(*) as Items'))
+            ->select('categoria',DB::raw('SUM(precio) as Total'),DB::raw('COUNT(*) as Items'))
         ->groupBy('categoria')
         ->get()
     );
 });
 Route::get('/viewEngine', function () {
     $users = User::all();
-    return ViewEngine::transform('layout',compact('users'));
+    return view('layout',compact('users'));
 });
 
 Route::get('/viewEngine2', function () {
-    return ViewEngine::transform('docs.prueba.random');
+    return view('docs.prueba.random');
+});
+
+Route::get('/orm', function() {
+    return httpResponse()->json(['HOLA'=>'ADIOS']);
 });

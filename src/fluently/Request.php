@@ -16,6 +16,15 @@ class Request {
         return $_POST[$name] ?? $body[$name] ?? null;
     }
 
+    public static function header($input = 'all') : mixed {
+        $headers = getallheaders();
+        if ($input == 'all') {
+            return $headers;
+        }else {
+            return isset($headers[$input]) ? $headers[$input] : '';
+        }
+    }
+
     public static function body() : mixed {
         return json_decode(file_get_contents('php://input'),true);
     }

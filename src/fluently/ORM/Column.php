@@ -1,16 +1,17 @@
 <?php
 
-class Table {
-    public string $table;
-    public string $primaryKey;
-    public array $columns;
-    public static mixed $commands = [];
+class Column {
+    public string $name;
+    public string $type;
+    public string $nullable;
+    public string $default;
+    //constrains
 
-    public function __construct(string $table, array $columns, string $primaryKey = 'id'){
-        $this->table = $primaryKey;
-        $this->table = $table;
-        $this->columns = $columns;
+    public function __construct(){
+        throw new \Exception('Not implemented');
     }
+}
+
     /**
      *          Schema::create('categories', function (Blueprint $table) {
      *          $table->id();
@@ -21,4 +22,3 @@ class Table {
      *          $table->timestamps();
      *      });
      */
-}

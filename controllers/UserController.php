@@ -3,11 +3,6 @@ require_once 'models/User.php';
 require_once 'Controller.php';
 
 class UserController extends Controller{
-    private PDO $db;
-
-    public function __construct() {
-        $this->db = getDBConnection();
-    }
 
     public function create() {
         User::create([
@@ -76,6 +71,6 @@ class UserController extends Controller{
         // }
         // echo ob_get_clean();
 
-        httpResponse()->json(User::where('id','>=',7)->first(),200);
+        return httpResponse()->json(User::where('id','>=',7)->first(),200);
     }
 }

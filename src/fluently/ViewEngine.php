@@ -51,6 +51,9 @@ class ViewEngine{
                     "/@endif/" => function() {
                         return "<?php endif; ?>";
                     },
+                    "/@method\(\'(.*)\'\)/" => function($match) {
+                        return "<input type='hidden' name='_method' value='$match[1]'>";
+                    },
                     "/\{\{(.*?)\}\}/" => function ($match) {
                         return "<?=$match[1]?>";
                     }
