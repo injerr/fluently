@@ -1,17 +1,14 @@
 <?php
 
 class Schema {
-    public static function create($tablename, Closure $callback) {
-        
+    public static function create(string $tablename, Closure $callback) {
+        $table = new Table($tablename);
+        $callback($table);
+        return $table;
+    }
+    
+    public static function update(Table $table, Closure $callback) {
+        $callback($table);
+        return $table;
     }
 }
-/**
- *     Schema::create('categories', function (Blueprint $table) {
- *          $table->id();
- *          $table->string('name');
- *          $table->string('icon')->nullable();
- *          $table->string('color')->default('#f3f4f6')->nullable();
- *          $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
- *          $table->timestamps();
- *      });
- */

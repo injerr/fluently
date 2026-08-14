@@ -69,6 +69,7 @@ class ViewEngine{
                 echo self::render($compiled,$data);
                 return;
             }else{
+                //ARREGLAR PARA QUE SALGA EL ERROR 404 O EL ERROR SHOWCASE SEGUN DEBA SER
                 $template = './src/utils/defaultPages/default404.php';
                 // ob_start();
                 // include $template;

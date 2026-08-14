@@ -63,5 +63,15 @@ Route::get('/viewEngine2', function () {
 });
 
 Route::get('/orm', function() {
-    return httpResponse()->json(['HOLA'=>'ADIOS']);
+    return httpResponse()->json(
+        Schema::create('Empleados', function (Table $table){
+            $table->id();
+            $table->integer('edad');
+            $table->string('nombre',255)->unique()->nullable();
+            $table->string('apellido');
+            $table->integer('codigo');
+            $table->decimal('salario',5,2);
+            $table->foreign('user_id')->references('id')->on('users');
+        }
+    ));
 });
