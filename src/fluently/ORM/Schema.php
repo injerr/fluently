@@ -1,7 +1,7 @@
 <?php
 
 class Schema {
-    public static function create(string $tablename, Closure $callback) {
+    public static function create(string $tablename, Closure $callback) : Table{
         $table = new Table($tablename);
         $callback($table);
         return $table;

@@ -7,6 +7,7 @@ class Column {
     public ?string $numberLength;
     public bool $nullable = false;
     public bool $unique;
+    public bool $unsigned;
     public bool $primary;
     public bool $foreign;
     public string $references;
@@ -43,6 +44,11 @@ class Column {
         $this->nullable = true;
         return $this;
     }
+    
+    public function unsigned(){
+        $this->unsigned = true;
+        return $this;
+    }
 
     public function references(string $columnName){
         $this->references = $columnName;
@@ -72,15 +78,68 @@ class Column {
         $this->nullOnUpdate = true;
         return $this;
     }
-}
 
-    /**
-     *          Schema::create('categories', function (Blueprint $table) {
-     *          $table->id();
-     *          $table->string('name');
-     *          $table->string('icon')->nullable();
-     *          $table->string('color')->default('#f3f4f6')->nullable();
-     *          $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
-     *          $table->timestamps();
-     *      });
-     */
+    public function toSQL(){
+        $nullable = isset($this->nullable) && $this->nullable == false ? "NOT NULL" : "";
+        $unique = isset($this->unique) && $this->unique == true ? "UNIQUE" : "";
+        $primary = isset($this->primary) && $this->primary == true ? "PRIMARY KEY" : "";
+        $unsigned = isset($this->unsigned) && $this->unsigned == true ? "UNSIGNED" : "";
+        $ai = isset($this->ai) && $this->ai == true ? "AUTO_INCREMENT" : "";
+
+        $references = "";
+        $type = "";
+        $length = null;
+
+        switch ($this->type) {
+            case 'string':
+                $type = "VARCHAR";
+                $length = "({$this->length})";
+                break;
+            case 'int':
+                $type = "INT";
+                break;
+            case 'bigint':
+                $type = "BIGINT";
+                break;
+            case 'float':
+                $type = "FLOAT";
+                $length = "({$this->numberLength})";
+                break;
+            case 'double':
+                $type = "DOUBLE";
+                $length = "({$this->numberLength})";
+                break;
+            
+            default:
+                $type = "VARCHAR(255)";
+                break;
+        }
+
+        if (isset($this->foreign) && $this->foreign) {
+            $db = Database::conectar();
+            $sql = "
+                SELECT COLUMN_TYPE
+                FROM INFORMATION_SCHEMA.COLUMNS
+                WHERE TABLE_SCHEMA = DATABASE()
+                AND TABLE_NAME = :table
+                AND COLUMN_NAME = :column
+            ";
+
+            $stmt = $db->prepare($sql);
+
+            $stmt->execute([
+                'table' => $this->onTable,
+                'column' => $this->references
+            ]);
+
+            $type = $stmt->fetchColumn();
+            $opts = ""; //CREAR SISTEMA ON DELETE CASCADE ETC...
+            $references = "REFERENCES {$this->onTable}({$this->references}) $opts";
+        }
+
+        if ( (isset($this->primary) && $this->primary) || (isset($this->foreign) && $this->foreign)) {
+            $nullable = "";
+        }
+        return preg_replace('/\s+/', ' ', trim("{$this->name} $type$length $unsigned $ai $primary $references $nullable $unique"));
+    }
+}

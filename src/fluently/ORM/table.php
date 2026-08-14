@@ -11,11 +11,22 @@ class Table {
         $this->table = $table;
     }
 
-    public function id() {
+    public function getColumn(string $name): Column | null{
+        foreach ($this->columns as $col) {
+            if ($col instanceof Column) {
+                if ($col->name == $name) {
+                    return $col;
+                }
+            }
+        }
+        return null;
+    }
+
+    public function id(?string $name = 'id',?string $type = 'bigint') {
         // $this->commands[] = new Column('id','BIGINT UNSIGNED');
         // $sql = 'BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY';
-        $col = new Column('id',"BIGINT UNSIGNED");
-        $col->unique()->primary()->autoIncrement();
+        $col = new Column($name,$type);
+        $col->primary()->autoIncrement()->unsigned();
         $this->columns[] = $col;
         return $col;
     }

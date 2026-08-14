@@ -49,8 +49,8 @@ Route::get('/groupby', function () {
     return httpResponse()->json(
         Query::table('productos')
             ->select('categoria',DB::raw('SUM(precio) as Total'),DB::raw('COUNT(*) as Items'))
-        ->groupBy('categoria')
-        ->get()
+            ->groupBy('categoria')
+            ->get()
     );
 });
 Route::get('/viewEngine', function () {
@@ -63,15 +63,23 @@ Route::get('/viewEngine2', function () {
 });
 
 Route::get('/orm', function() {
-    return httpResponse()->json(
-        Schema::create('Empleados', function (Table $table){
-            $table->id();
-            $table->integer('edad');
-            $table->string('nombre',255)->unique()->nullable();
-            $table->string('apellido');
-            $table->integer('codigo');
-            $table->decimal('salario',5,2);
-            $table->foreign('user_id')->references('id')->on('users');
-        }
-    ));
+    $theTable = Schema::create('Empleados', function (Table $table){
+        $table->id();
+        $table->integer('edad');
+        $table->string('nombre',255)->unique()->nullable();
+        $table->string('apellido');
+        $table->integer('codigo');
+        $table->decimal('salario',5,2);
+        $table->foreign('user_id')->references('user')->on('users');
+    });
+
+    $sql = [];
+    foreach ($theTable->columns as $col) {
+        $sql[] = $col->toSQL();
+    }
+
+    return httpResponse()->json([
+        'Table' => $theTable,
+        'TableSQL' => $sql
+    ]);
 });
