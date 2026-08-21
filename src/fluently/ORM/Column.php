@@ -109,6 +109,10 @@ class Column {
                 $type = "DOUBLE";
                 $length = "({$this->numberLength})";
                 break;
+            case 'timestamp':
+                $type = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP";
+                $length = "";
+                break;
             
             default:
                 $type = "VARCHAR(255)";

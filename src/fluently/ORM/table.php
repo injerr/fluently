@@ -37,6 +37,12 @@ class Table {
         return $col;
     }
 
+    public function timestamp(string $name){
+        $col = new Column($name,"timestamp");
+        $this->columns[] = $col;
+        return $col;
+    }
+
     public function integer(string $name){
         $col = new Column($name,"int");
         $this->columns[] = $col;
@@ -59,14 +65,5 @@ class Table {
         $this->columns[] = $col;
         return $col;
     }
-    /**
-     *      Schema::create('categories', function (Blueprint $table) {
-     *          $table->id();
-     *          $table->string('name');
-     *          $table->string('icon')->nullable();
-     *          $table->string('color')->default('#f3f4f6')->nullable();
-     *          $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
-     *          $table->timestamps();
-     *      });
-     */
+
 }

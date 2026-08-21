@@ -62,24 +62,24 @@ Route::get('/viewEngine2', function () {
     return view('docs.prueba.random');
 });
 
-Route::get('/orm', function() {
-    $theTable = Schema::create('Empleados', function (Table $table){
-        $table->id();
-        $table->integer('edad');
-        $table->string('nombre',255)->unique()->nullable();
-        $table->string('apellido');
-        $table->integer('codigo');
-        $table->decimal('salario',5,2);
-        $table->foreign('user_id')->references('user')->on('users');
-    });
+// Route::get('/orm', function() {
+//     $theTable = Schema::create('Empleados', function (Table $table){
+//         $table->id();
+//         $table->integer('edad');
+//         $table->string('nombre',255)->unique()->nullable();
+//         $table->string('apellido');
+//         $table->integer('codigo');
+//         $table->decimal('salario',5,2);
+//         $table->foreign('user_id')->references('user')->on('users');
+//     });
 
-    $sql = [];
-    foreach ($theTable->columns as $col) {
-        $sql[] = $col->toSQL();
-    }
+//     $sql = [];
+//     foreach ($theTable->columns as $col) {
+//         $sql[] = $col->toSQL();
+//     }
 
-    return httpResponse()->json([
-        'Table' => $theTable,
-        'TableSQL' => $sql
-    ]);
-});
+//     return httpResponse()->json([
+//         'Table' => $theTable,
+//         'TableSQL' => $sql
+//     ]);
+// });

@@ -18,7 +18,8 @@ class Database {
 
             return self::$connection;
         } catch (PDOException $e) {
-            die("Error de conexión: " . $e->getMessage());
+            //die("Error de conexión: " . $e->getMessage());
+            throw new Error("Error de conexión: " . $e->getMessage());
         }
     }
 }
